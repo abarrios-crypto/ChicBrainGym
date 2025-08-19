@@ -70,7 +70,7 @@
     .sparkle::before { top: -8px; left: -6px; font-size: 10px; animation-delay: 0.2s;}
     .sparkle::after { bottom: -10px; right: -4px; font-size: 12px; animation-delay: 1s;}
     @keyframes twinkle { 0%,100%{opacity:.2; transform: scale(.9) rotate(0);} 50%{opacity:1; transform: scale(1.2) rotate(15deg);} }
-    /* Skins */
+    /* Skins (aplicadas a zonas de juego) */
     .skin-bubble { background-image: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, .6), transparent 40%), radial-gradient(circle at 80% 30%, rgba(255, 255, 255, .4), transparent 40%); }
     .skin-grid { background-image: linear-gradient(90deg, rgba(0,0,0,.05) 1px, transparent 1px), linear-gradient(180deg, rgba(0,0,0,.05) 1px, transparent 1px); background-size: 24px 24px; }
     .skin-soft { background-image: linear-gradient(120deg, rgba(255,255,255,.4), rgba(255,255,255,.7)); }
@@ -97,6 +97,7 @@
   <!-- Top Bar -->
   <header class="glass sticky top-0 z-40">
     <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <!-- Left: Brand -->
       <div class="flex items-center gap-3">
         <div class="text-3xl">🧠</div>
         <div>
@@ -104,6 +105,7 @@
           <div class="text-xs text-slate-500 -mt-1">Modo pastel luminoso</div>
         </div>
       </div>
+      <!-- Center: Progress + Streak -->
       <div class="hidden md:flex flex-col items-center min-w-[280px]">
         <div class="flex items-center gap-3 mb-1">
           <div class="text-sm font-semibold text-slate-600">Nivel <span id="playerLevel">1</span></div>
@@ -113,6 +115,7 @@
           <div id="levelProgress" class="h-full rounded-full bg-gradient-to-r from-pink-400 via-sky-400 to-amber-300 transition-all" style="width: 10%;"></div>
         </div>
       </div>
+      <!-- Right: Profile + Currency + Buttons -->
       <div class="flex items-center gap-3">
         <div class="flex items-center gap-2 glass rounded-full px-3 py-1">
           <div class="text-amber-500 text-xl">🪙</div>
@@ -168,16 +171,19 @@
 
   <!-- Main -->
   <main class="max-w-6xl mx-auto px-4 py-8">
+    <!-- Menu -->
     <div id="mainMenu" class="fade-in">
       <div class="text-center mb-10">
         <h2 class="text-3xl md:text-4xl font-extrabold text-slate-700 mb-2">¡Entrena tu mente con estilo!</h2>
         <p class="text-slate-600">Elige un ejercicio, gana monedas y desbloquea skins y avatares.</p>
       </div>
+      <!-- Quick actions -->
       <div class="flex flex-wrap gap-3 justify-center mb-8">
         <button id="openBadgesBtn" class="glass shine rounded-xl px-4 py-2 text-slate-700 font-semibold">🏅 Insignias</button>
         <button id="openInventoryBtn" class="glass shine rounded-xl px-4 py-2 text-slate-700 font-semibold">🎒 Inventario</button>
         <button id="openSettingsBtn" class="glass shine rounded-xl px-4 py-2 text-slate-700 font-semibold">⚙️ Ajustes</button>
       </div>
+      <!-- Games Grid -->
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         <div class="glass shine rounded-2xl p-6 cursor-pointer hover:scale-[1.01] transition" onclick="startMemoryGame()">
           <div class="text-5xl mb-3 text-center">🎯</div>
@@ -185,7 +191,24 @@
           <p class="text-slate-600 text-sm mb-3">Secuencia de colores con skin aplicado</p>
           <div class="text-xs text-slate-500 flex items-center justify-between"><span>🧠 Memoria</span><span>⏱️ 2-5 min</span></div>
         </div>
-        <!-- (otros juegos... omitidos por brevedad) -->
+        <div class="glass shine rounded-2xl p-6 cursor-pointer hover:scale-[1.01] transition" onclick="startMathGame()">
+          <div class="text-5xl mb-3 text-center">🔢</div>
+          <h3 class="text-xl font-bold text-slate-800 mb-1">Cálculo Rápido</h3>
+          <p class="text-slate-600 text-sm mb-3">Resuelve contra el tiempo con combos</p>
+          <div class="text-xs text-slate-500 flex items-center justify-between"><span>🧮 Lógica</span><span>⏱️ 1-3 min</span></div>
+        </div>
+        <div class="glass shine rounded-2xl p-6 cursor-pointer hover:scale-[1.01] transition" onclick="startWordGame()">
+          <div class="text-5xl mb-3 text-center">📝</div>
+          <h3 class="text-xl font-bold text-slate-800 mb-1">Palabras Rápidas</h3>
+          <p class="text-slate-600 text-sm mb-3">Encuentra palabras con letra indicada</p>
+          <div class="text-xs text-slate-500 flex items-center justify-between"><span>💭 Lenguaje</span><span>⏱️ 2-4 min</span></div>
+        </div>
+        <div class="glass shine rounded-2xl p-6 cursor-pointer hover:scale-[1.01] transition" onclick="startAttentionGame()">
+          <div class="text-5xl mb-3 text-center">👁️</div>
+          <h3 class="text-xl font-bold text-slate-800 mb-1">Atención Selectiva</h3>
+          <p class="text-slate-600 text-sm mb-3">Encuentra los objetivos entre distractores</p>
+          <div class="text-xs text-slate-500 flex items-center justify-between"><span>🎯 Atención</span><span>⏱️ 1-2 min</span></div>
+        </div>
       </div>
     </div>
 
@@ -217,6 +240,7 @@
         <button onclick="closeShop()" class="text-slate-600 hover:text-slate-800">✖</button>
       </div>
       <div class="grid md:grid-cols-2 gap-6">
+        <!-- Skins -->
         <div class="glass rounded-2xl p-4">
           <div class="flex items-center justify-between mb-3">
             <h4 class="font-bold text-slate-700">Skins</h4>
@@ -285,6 +309,7 @@
             </div>
           </div>
         </div>
+        <!-- Avatars -->
         <div class="glass rounded-2xl p-4">
           <div class="flex items-center justify-between mb-3">
             <h4 class="font-bold text-slate-700">Avatares</h4>
@@ -313,7 +338,7 @@
   <canvas id="confetti" class="confetti hidden"></canvas>
 
   <script>
-    // === Estado del juego ===
+    // Estado centralizado
     let state = {
       totalScore: 0,
       currentStreak: 0,
@@ -344,7 +369,23 @@
       memory: '🧠', shopper: '🛍️', explorer: '🗺️'
     };
 
-    // === Guardar y cargar progreso ===
+    // Referencias del DOM
+    const coinsEl = document.getElementById('coins');
+    const totalScoreEl = document.getElementById('totalScore');
+    const streakEl = document.getElementById('streak');
+    const streakMultEl = document.getElementById('streakMult');
+    const levelEl = document.getElementById('playerLevel');
+    const levelBar = document.getElementById('levelProgress');
+    const bestTimeEl = document.getElementById('bestTime');
+    const badgeCountEl = document.getElementById('badgeCount');
+    const avatarCircle = document.getElementById('avatarCircle');
+    const currentSkinLabel = document.getElementById('currentSkinLabel');
+    const comboLabel = document.getElementById('comboLabel');
+
+    // Variables de control
+    let answerLocked = false;
+
+    // Guardar progreso
     function saveProgress() {
       const data = {
         ...state,
@@ -355,6 +396,7 @@
       localStorage.setItem('brainGymSave', JSON.stringify(data));
     }
 
+    // Cargar progreso
     function loadProgress() {
       const saved = localStorage.getItem('brainGymSave');
       if (saved) {
@@ -363,38 +405,351 @@
         state.ownedSkins = new Set(data.ownedSkins);
         state.ownedAvatars = new Set(data.ownedAvatars);
         state.badges = data.badges || [];
+        updateTopbar();
         toast('Progreso cargado 🎉');
       }
     }
 
-    // === UI ===
+    // Actualizar barra superior
     function updateTopbar() {
-      document.getElementById('coins').textContent = state.coins;
-      document.getElementById('totalScore').textContent = state.totalScore;
-      document.getElementById('streak').textContent = state.currentStreak;
+      coinsEl.textContent = state.coins;
+      totalScoreEl.textContent = state.totalScore;
+      streakEl.textContent = state.currentStreak;
       const mult = 1 + Math.floor(state.currentStreak / 5);
-      document.getElementById('streakMult').textContent = mult;
-      document.getElementById('comboLabel').textContent = `Combo x${mult}`;
-      document.getElementById('comboLabel').classList.toggle('hidden', state.currentStreak < 2);
-      document.getElementById('playerLevel').textContent = state.level;
-      document.getElementById('levelProgress').style.width = Math.min(state.levelXP, 100) + '%';
-      document.getElementById('badgeCount').textContent = state.badges.length;
-      document.getElementById('avatarCircle').textContent = state.currentAvatar;
-      document.getElementById('currentSkinLabel').textContent = skinNameMap[state.currentSkin] || '—';
-      document.getElementById('playerName').value = state.playerName;
+      streakMultEl.textContent = mult;
+      comboLabel.textContent = `Combo x${mult}`;
+      comboLabel.classList.toggle('hidden', state.currentStreak < 2);
+      levelEl.textContent = state.level;
+      levelBar.style.width = Math.min(state.levelXP, 100) + '%';
+      badgeCountEl.textContent = state.badges.length;
+      avatarCircle.textContent = state.currentAvatar;
+      currentSkinLabel.textContent = skinNameMap[state.currentSkin] || '—';
     }
 
-    // === Eventos de guardado ===
-    window.addEventListener('beforeunload', saveProgress);
+    // Ganar XP
+    function earnXP(amount) {
+      state.levelXP += amount;
+      if (state.levelXP >= 100) {
+        state.level++;
+        state.levelXP -= 100;
+        toast(`Subiste a Nivel ${state.level}! ✨`);
+        miniConfetti();
+      }
+      updateTopbar();
+    }
+
+    // Añadir monedas
+    function addCoins(amount) {
+      state.coins += amount;
+      updateTopbar();
+      pulseCoins();
+    }
+
+    // Gastar monedas
+    function spendCoins(amount) {
+      if (state.coins >= amount) {
+        state.coins -= amount;
+        updateTopbar();
+        return true;
+      }
+      toast('No tienes suficientes monedas 🪙');
+      return false;
+    }
+
+    function pulseCoins() {
+      coinsEl.parentElement.classList.add('pop');
+      setTimeout(() => coinsEl.parentElement.classList.remove('pop'), 250);
+    }
+
+    function addBadge(key, title) {
+      if (!state.badges.find(b => b.key === key)) {
+        state.badges.push({ key, title, icon: badgeIcons[key] || '🏅' });
+        updateTopbar();
+        showBadge(title, badgeIcons[key] || '🏅');
+      }
+    }
+
+    function showBadge(title, icon) {
+      const modal = document.createElement('div');
+      modal.className = 'fixed inset-0 flex items-center justify-center z-50';
+      modal.innerHTML = `
+        <div class="glass rounded-3xl p-6 fade-in text-center sparkle">
+          <div class="text-5xl mb-2">${icon}</div>
+          <div class="text-xl font-extrabold text-slate-800 mb-1">¡Nueva Insignia!</div>
+          <div class="text-slate-600 mb-4">${title}</div>
+          <button class="rounded-xl px-5 py-2 bg-slate-700 text-white">Genial</button>
+        </div>`;
+      modal.addEventListener('click', () => document.body.removeChild(modal));
+      document.body.appendChild(modal);
+      setTimeout(() => document.body.removeChild(modal), 3500);
+    }
+
+    function toast(msg) {
+      const t = document.createElement('div');
+      t.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 glass rounded-full px-4 py-2 text-slate-700 font-semibold z-50';
+      t.textContent = msg;
+      document.body.appendChild(t);
+      setTimeout(() => {
+        t.style.opacity = '0';
+        t.style.transform = 'translate(-50%, 10px)';
+        setTimeout(() => document.body.removeChild(t), 300);
+      }, 1600);
+    }
+
+    function miniConfetti() {
+      const c = document.getElementById('confetti');
+      const ctx = c.getContext('2d');
+      c.classList.remove('hidden');
+      c.width = window.innerWidth; c.height = window.innerHeight;
+      const parts = Array.from({length: 70}, () => ({
+        x: Math.random()*c.width, y: -10, s: Math.random()*4+2,
+        vx: (Math.random()-0.5)*2, vy: Math.random()*2+2,
+        color: ['#f9a8d4','#93c5fd','#fde68a','#a7f3d0'][Math.floor(Math.random()*4)]
+      }));
+      let frames = 0;
+      function draw() {
+        ctx.clearRect(0,0,c.width,c.height);
+        parts.forEach(p => {
+          p.x += p.vx; p.y += p.vy;
+          ctx.fillStyle = p.color;
+          ctx.fillRect(p.x, p.y, p.s, p.s);
+        });
+        frames++;
+        if (frames < 60) requestAnimationFrame(draw);
+        else c.classList.add('hidden');
+      }
+      draw();
+    }
+
+    function updateScore(points) {
+      const mult = 1 + Math.floor(state.currentStreak / 5);
+      const final = Math.round(points * mult);
+      state.totalScore += final;
+      state.gameScore += final;
+      state.currentStreak++;
+      document.getElementById('gameScore').textContent = `Puntos: ${state.gameScore}`;
+      updateTopbar();
+      earnXP(3);
+      addCoins(1);
+      if (state.currentStreak === 5) addBadge('streak5', 'Racha x5');
+      if (state.currentStreak === 10) addBadge('streak10', 'Racha x10');
+    }
+
+    function resetStreak() {
+      state.currentStreak = 0;
+      updateTopbar();
+    }
+
+    function startTimer() {
+      state.timeLeft = 60;
+      document.getElementById('gameTimer').textContent = `Tiempo: ${state.timeLeft}s`;
+      clearInterval(state.gameTimer);
+      state.gameTimer = setInterval(() => {
+        state.timeLeft--;
+        document.getElementById('gameTimer').textContent = `Tiempo: ${state.timeLeft}s`;
+        if (state.timeLeft <= 0) endGame();
+      }, 1000);
+    }
+
+    function endGame() {
+      clearInterval(state.gameTimer);
+      const chest = Math.random() < 0.35 ? Math.floor(Math.random() * 12) + 8 : 0;
+      if (chest) { addCoins(chest); toast(`¡Cofre sorpresa! +${chest} 🪙`); }
+      const gameContent = document.getElementById('gameContent');
+      gameContent.innerHTML = `
+        <div class="text-center py-10">
+          <div class="text-6xl mb-3">🎉</div>
+          <h3 class="text-2xl md:text-3xl font-extrabold text-slate-800 mb-2">¡Tiempo terminado!</h3>
+          <p class="text-slate-600 mb-4">Puntos de esta ronda: <b>${state.gameScore}</b></p>
+          <div class="mb-6">
+            <button onclick="backToMenu()" class="rounded-xl px-6 py-3 bg-pink-500 text-white font-semibold hover:opacity-95">Seguir Entrenando</button>
+          </div>
+          <div class="text-sm text-slate-500">Racha final: ${state.currentStreak}</div>
+        </div>
+      `;
+      resetStreak();
+      earnXP(Math.min(20, Math.floor(state.gameScore / 50)));
+      state.gameScore = 0;
+    }
+
+    function backToMenu() {
+      clearInterval(state.gameTimer);
+      document.getElementById('mainMenu').classList.remove('hidden');
+      document.getElementById('gameArea').classList.add('hidden');
+      state.gameScore = 0;
+      applySkinToArea();
+    }
+
+    function showGame(title) {
+      document.getElementById('mainMenu').classList.add('hidden');
+      document.getElementById('gameArea').classList.remove('hidden');
+      document.getElementById('gameTitle').textContent = title;
+      document.getElementById('gameScore').textContent = 'Puntos: 0';
+      state.gameScore = 0;
+      startTimer();
+      applySkinToArea();
+    }
+
+    function applySkinToArea() {
+      const area = document.getElementById('gameContent');
+      area.className = area.className.replace(/skin-\w+/g, '');
+      area.classList.add(`skin-${state.currentSkin}`);
+    }
+
+    // Tienda e inventario
+    const shopModal = document.getElementById('shopModal');
+    const inventoryModal = document.getElementById('inventoryModal');
+    const badgesModal = document.getElementById('badgesModal');
+    const settingsModal = document.getElementById('settingsModal');
+
+    document.getElementById('openShopBtn').onclick = () => { shopModal.classList.remove('hidden'); shopModal.classList.add('flex'); };
+    document.getElementById('openInventoryBtn').onclick = () => { openInventory(); };
+    document.getElementById('openBadgesBtn').onclick = () => { openBadges(); };
+    document.getElementById('openSettingsBtn').onclick = () => { openSettings(); };
+
+    function closeShop() { shopModal.classList.add('hidden'); shopModal.classList.remove('flex'); }
+    function closeInventory() { inventoryModal.classList.add('hidden'); inventoryModal.classList.remove('flex'); }
+    function closeBadges() { badgesModal.classList.add('hidden'); badgesModal.classList.remove('flex'); }
+    function closeSettings() { settingsModal.classList.add('hidden'); settingsModal.classList.remove('flex'); }
+
+    function buySkin(skin, price) {
+      if (state.ownedSkins.has(skin)) {
+        state.currentSkin = skin;
+        applySkinToArea();
+        updateTopbar();
+        toast(`Skin ${skinNameMap[skin]} aplicada ✨`);
+        return;
+      }
+      if (spendCoins(price)) {
+        state.ownedSkins.add(skin);
+        state.currentSkin = skin;
+        applySkinToArea();
+        updateTopbar();
+        addBadge('shopper', 'Comprador/a');
+        toast(`¡Compraste ${skinNameMap[skin]}!`);
+      }
+    }
+
+    function buyAvatar(emoji, price) {
+      if (state.ownedAvatars.has(emoji)) {
+        state.currentAvatar = emoji;
+        updateTopbar();
+        toast('Avatar aplicado ✨');
+        return;
+      }
+      if (spendCoins(price)) {
+        state.ownedAvatars.add(emoji);
+        state.currentAvatar = emoji;
+        updateTopbar();
+        addBadge('shopper', 'Comprador/a');
+        toast('¡Nuevo avatar adquirido!');
+      }
+    }
+
+    function refreshInventory() {
+      const s = document.getElementById('inventorySkins');
+      const a = document.getElementById('inventoryAvatars');
+      s.innerHTML = '';
+      a.innerHTML = '';
+      [...state.ownedSkins].forEach(skin => {
+        const div = document.createElement('div');
+        div.className = 'glass rounded-xl p-3 cursor-pointer hover:scale-[1.02] transition';
+        div.innerHTML = `<div class="h-14 rounded-lg skin-${skin}"></div><div class="mt-2 text-sm font-semibold text-slate-700">${skinNameMap[skin]}</div>`;
+        div.onclick = () => { state.currentSkin = skin; applySkinToArea(); updateTopbar(); toast(`Skin ${skinNameMap[skin]} aplicada`); };
+        s.appendChild(div);
+      });
+      [...state.ownedAvatars].forEach(emoji => {
+        const btn = document.createElement('button');
+        btn.className = 'glass rounded-xl p-3 text-2xl hover:scale-[1.03] transition';
+        btn.textContent = emoji;
+        btn.onclick = () => { state.currentAvatar = emoji; updateTopbar(); toast('Avatar aplicado'); };
+        a.appendChild(btn);
+      });
+    }
+
+    function refreshBadges() {
+      const list = document.getElementById('badgesList');
+      list.innerHTML = '';
+      if (state.badges.length === 0) {
+        list.innerHTML = '<div class="text-slate-600">Aún no tienes insignias. ¡Consigue una racha o compra algo en la tienda!</div>';
+        return;
+      }
+      state.badges.forEach(b => {
+        const card = document.createElement('div');
+        card.className = 'glass rounded-2xl p-4 text-center sparkle';
+        card.innerHTML = `<div class="text-3xl mb-2">${b.icon}</div><div class="font-semibold text-slate-700">${b.title}</div>`;
+        list.appendChild(card);
+      });
+    }
+
+    // Juegos
+    function startMathGame() {
+      showGame('Cálculo Rápido');
+      generateMathProblem();
+    }
+
+    function generateMathProblem() {
+      const ops = ['+', '-', '×'];
+      const op = ops[Math.floor(Math.random() * ops.length)];
+      let n1, n2, ans;
+      if (op === '+') { n1 = rand(10, 60); n2 = rand(10, 60); ans = n1 + n2; }
+      if (op === '-') { n1 = rand(30, 80); n2 = rand(5, 40); ans = n1 - n2; }
+      if (op === '×') { n1 = rand(2, 14); n2 = rand(2, 14); ans = n1 * n2; }
+      state.currentMathProblem = { n1, n2, op, ans };
+      const wrong = [];
+      while (wrong.length < 3) {
+        let w = ans + rand(-12, 12);
+        if (w !== ans && w >= 0 && !wrong.includes(w)) wrong.push(w);
+      }
+      const choices = [ans, ...wrong].sort(() => Math.random() - 0.5);
+      document.getElementById('gameContent').innerHTML = `
+        <div class="mb-6">
+          <div class="text-3xl font-extrabold text-slate-800 mb-4">${n1} ${op} ${n2} = ?</div>
+          <div class="grid grid-cols-2 max-w-xs mx-auto gap-3">
+            ${choices.map(a => `<button class="rounded-xl px-4 py-3 bg-sky-400/80 text-white font-bold hover:opacity-95" onclick="checkMathAnswer(${a})">${a}</button>`).join('')}
+          </div>
+        </div>`;
+    }
+
+    function checkMathAnswer(sel) {
+      if (answerLocked) return;
+      answerLocked = true;
+
+      const buttons = document.querySelectorAll('#gameContent button');
+      buttons.forEach(b => {
+        b.disabled = true;
+        b.style.opacity = '0.6';
+        b.style.pointerEvents = 'none';
+      });
+
+      const clickedButton = event.target;
+
+      setTimeout(() => {
+        if (sel === state.currentMathProblem.ans) {
+          updateScore(15);
+          earnXP(4);
+          addCoins(2);
+          clickedButton.classList.add('pulse-correct');
+        } else {
+          resetStreak();
+          clickedButton.classList.add('pulse-incorrect');
+        }
+      }, 100);
+
+      setTimeout(() => {
+        answerLocked = false;
+        generateMathProblem();
+      }, 800);
+    }
+
+    function rand(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    // Inicialización
     window.addEventListener('load', loadProgress);
-
-    // Llamada inicial
+    window.addEventListener('beforeunload', saveProgress);
     updateTopbar();
-    refreshInventory();
-    refreshBadges();
-
-    // Resto del código igual (miniConfetti, earnXP, addBadge, etc.)
-    // ... (mismas funciones con `state.` en lugar de variables globales)
   </script>
 </body>
 </html>
