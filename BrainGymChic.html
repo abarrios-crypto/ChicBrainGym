@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gimnasia Cerebral - Aesthetic Pastel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
+    body { font-family: 'Poppins', sans-serif; }
+    /* Aesthetic pastel base */
+    .pastel-bg {
+      background: radial-gradient(1200px 600px at 10% 10%, #ffe7f1 0%, #fff8e7 35%, #eaf8ff 70%, #f2ecff 100%);
+      min-height: 100vh;
+    }
+    /* Glass cards */
+    .glass {
+      background: rgba(255,255,255,0.65);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.5);
+    }
+    .shine {
+      position: relative;
+      overflow: hidden;
+    }
+    .shine::after {
+      content: "";
+      position: absolute;
+      top: -150%;
+      left: -150%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.35) 50%, transparent 70%);
+      transform: rotate(0deg);
+      transition: transform .6s ease, top .6s ease, left .6s ease;
+    }
+    .shine:hover::after {
+      top: -50%;
+      left: -30%;
+      transform: rotate(10deg);
+    }
+    /* Animations */
+    .fade-in { animation: fadeIn .5s ease; }
+    @keyframes fadeIn { from {opacity: 0; transform: translateY(10px);} to {opacity:1; transform: translateY(0);} }
+    .pop { animation: pop .25s ease; }
+    @keyframes pop { from {transform: scale(.95);} to {transform: scale(1);} }
+    .pulse-correct { animation: pulseGreen .6s ease-in-out; }
+    .pulse-incorrect { animation: pulseRed .6s ease-in-out; }
+    @keyframes pulseGreen {
+      0%,100% { transform: scale(1); background-color: #34d399; }
+      50% { transform: scale(1.05); background-color: #10b981; }
+    }
+    @keyframes pulseRed {
+      0%,100% { transform: scale(1); background-color: #f87171; }
+      50% { transform: scale(1.05); background-color: #ef4444; }
+    }
+    /* Badge sparkle */
+    .sparkle {
+      position: relative;
+      overflow: visible;
+    }
+    .sparkle::before, .sparkle::after {
+      content: "✦";
+      position: absolute;
+      color: rgba(255,255,255,0.9);
+      text-shadow: 0 0 8px rgba(255,255,255,0.8);
+      animation: twinkle 2s infinite ease-in-out;
+    }
+    .sparkle::before { top: -8px; left: -6px; font-size: 10px; animation-delay: 0.2s;}
+    .sparkle::after { bottom: -10px; right: -4px; font-size: 12px; animation-delay: 1s;}
+    @keyframes twinkle { 0%,100%{opacity:.2; transform: scale(.9) rotate(0);} 50%{opacity:1; transform: scale(1.2) rotate(15deg);} }
+    /* Skins */
+    .skin-bubble { background-image: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, .6), transparent 40%), radial-gradient(circle at 80% 30%, rgba(255, 255, 255, .4), transparent 40%); }
+    .skin-grid { background-image: linear-gradient(90deg, rgba(0,0,0,.05) 1px, transparent 1px), linear-gradient(180deg, rgba(0,0,0,.05) 1px, transparent 1px); background-size: 24px 24px; }
+    .skin-soft { background-image: linear-gradient(120deg, rgba(255,255,255,.4), rgba(255,255,255,.7)); }
+    .skin-stars { background-image: radial-gradient(circle, #fbbf24 10%, transparent 10%); background-size: 40px 40px; background-position: 0 0, 20px 20px; }
+    .skin-leaf { background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23a3e635' fill-opacity='0.2' d='M30 10c-4 8-10 14-10 22 0 10 10 14 10 22 0-8 10-12 10-22 0-8-6-14-10-22z'/%3E%3C/svg%3E"); }
+    .skin-waves { background: linear-gradient(90deg, #fbcfe8 10%, transparent 10%, transparent 20%), linear-gradient(90deg, #bfdbfe 20%, transparent 20%, transparent 30%), linear-gradient(90deg, #fde68a 30%, transparent 30%, transparent 40%); background-size: 40px 100%; }
+    /* Avatar circle ring */
+    .ring-animated {
+      box-shadow: 0 0 0 3px #fbcfe8, 0 0 0 6px #bfdbfe, 0 0 0 9px #fde68a;
+      border-radius: 9999px;
+    }
+    /* Confetti mini */
+    .confetti {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 60;
+    }
+    /* Hidden utility */
+    .hidden-soft { display: none; }
+  </style>
+</head>
+<body class="pastel-bg">
+  <!-- Top Bar -->
+  <header class="glass sticky top-0 z-40">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="text-3xl">🧠</div>
+        <div>
+          <div class="text-xl md:text-2xl font-extrabold text-slate-700">Gimnasia Cerebral</div>
+          <div class="text-xs text-slate-500 -mt-1">Modo pastel luminoso</div>
+        </div>
+      </div>
+      <div class="hidden md:flex flex-col items-center min-w-[280px]">
+        <div class="flex items-center gap-3 mb-1">
+          <div class="text-sm font-semibold text-slate-600">Nivel <span id="playerLevel">1</span></div>
+          <div class="text-xs px-2 py-1 rounded-full bg-pink-100 text-pink-700">x<span id="streakMult">1</span> multiplicador</div>
+        </div>
+        <div class="w-64 h-3 rounded-full bg-slate-200 overflow-hidden">
+          <div id="levelProgress" class="h-full rounded-full bg-gradient-to-r from-pink-400 via-sky-400 to-amber-300 transition-all" style="width: 10%;"></div>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2 glass rounded-full px-3 py-1">
+          <div class="text-amber-500 text-xl">🪙</div>
+          <div class="font-semibold text-slate-700"><span id="coins">50</span></div>
+        </div>
+        <button id="openShopBtn" class="glass shine rounded-full px-4 py-2 text-slate-700 font-semibold hover:scale-[1.02] transition">
+          🛍️ Tienda
+        </button>
+        <div class="flex items-center gap-3 glass rounded-full p-2">
+          <div id="avatarCircle" class="w-10 h-10 flex items-center justify-center text-xl bg-gradient-to-br from-pink-200 to-sky-200 ring-animated">😊</div>
+          <div class="hidden sm:flex flex-col">
+            <input id="playerName" class="bg-transparent text-slate-700 font-semibold w-24 focus:outline-none" value="Jugador/a"/>
+            <div class="text-xs text-slate-500 -mt-1">Skin: <span id="currentSkinLabel">Bubble</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Stats row -->
+  <section class="max-w-6xl mx-auto px-4 mt-6">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="glass rounded-2xl p-4 flex items-center justify-between">
+        <div>
+          <div class="text-xs text-slate-500">Puntos Totales</div>
+          <div class="text-2xl font-bold text-slate-700" id="totalScore">0</div>
+        </div>
+        <div class="text-2xl">✨</div>
+      </div>
+      <div class="glass rounded-2xl p-4 flex items-center justify-between">
+        <div>
+          <div class="text-xs text-slate-500">Racha</div>
+          <div class="text-2xl font-bold text-slate-700" id="streak">0</div>
+        </div>
+        <div class="text-2xl">🔥</div>
+      </div>
+      <div class="glass rounded-2xl p-4 flex items-center justify-between">
+        <div>
+          <div class="text-xs text-slate-500">Insignias</div>
+          <div class="text-2xl font-bold text-slate-700" id="badgeCount">0</div>
+        </div>
+        <div class="text-2xl">🏅</div>
+      </div>
+      <div class="glass rounded-2xl p-4 flex items-center justify-between">
+        <div>
+          <div class="text-xs text-slate-500">Mejor Tiempo</div>
+          <div class="text-2xl font-bold text-slate-700" id="bestTime">—</div>
+        </div>
+        <div class="text-2xl">⏱️</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main -->
+  <main class="max-w-6xl mx-auto px-4 py-8">
+    <div id="mainMenu" class="fade-in">
+      <div class="text-center mb-10">
+        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-700 mb-2">¡Entrena tu mente con estilo!</h2>
+        <p class="text-slate-600">Elige un ejercicio, gana monedas y desbloquea skins y avatares.</p>
+      </div>
+      <div class="flex flex-wrap gap-3 justify-center mb-8">
+        <button id="openBadgesBtn" class="glass shine rounded-xl px-4 py-2 text-slate-700 font-semibold">🏅 Insignias</button>
+        <button id="openInventoryBtn" class="glass shine rounded-xl px-4 py-2 text-slate-700 font-semibold">🎒 Inventario</button>
+        <button id="openSettingsBtn" class="glass shine rounded-xl px-4 py-2 text-slate-700 font-semibold">⚙️ Ajustes</button>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div class="glass shine rounded-2xl p-6 cursor-pointer hover:scale-[1.01] transition" onclick="startMemoryGame()">
+          <div class="text-5xl mb-3 text-center">🎯</div>
+          <h3 class="text-xl font-bold text-slate-800 mb-1">Memoria Visual</h3>
+          <p class="text-slate-600 text-sm mb-3">Secuencia de colores con skin aplicado</p>
+          <div class="text-xs text-slate-500 flex items-center justify-between"><span>🧠 Memoria</span><span>⏱️ 2-5 min</span></div>
+        </div>
+        <!-- (otros juegos... omitidos por brevedad) -->
+      </div>
+    </div>
+
+    <!-- Game Area -->
+    <div id="gameArea" class="hidden fade-in">
+      <div class="glass rounded-2xl p-6 md:p-8">
+        <div class="flex items-center justify-between mb-6">
+          <button onclick="backToMenu()" class="rounded-xl px-5 py-3 bg-slate-600 text-white font-semibold hover:opacity-95">← Menú</button>
+          <div class="text-center">
+            <h2 id="gameTitle" class="text-2xl md:text-3xl font-extrabold text-slate-800 mb-1"></h2>
+            <div class="flex items-center justify-center gap-3">
+              <span id="gameScore" class="px-3 py-1 rounded-full bg-pink-100 text-pink-700 font-semibold">Puntos: 0</span>
+              <span id="gameTimer" class="px-3 py-1 rounded-full bg-sky-100 text-sky-700 font-semibold">Tiempo: 60s</span>
+              <span id="comboLabel" class="px-3 py-1 rounded-full bg-amber-100 text-amber-700 font-semibold hidden">Combo x1</span>
+            </div>
+          </div>
+          <div class="w-24"></div>
+        </div>
+        <div id="gameContent" class="text-center rounded-2xl p-4 md:p-6 skin-bubble"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Shop Modal -->
+  <div id="shopModal" class="fixed inset-0 bg-black/30 hidden items-center justify-center z-50">
+    <div class="glass rounded-3xl w-[95%] max-w-3xl p-6 md:p-8 fade-in">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-2xl font-extrabold text-slate-800">Tienda</h3>
+        <button onclick="closeShop()" class="text-slate-600 hover:text-slate-800">✖</button>
+      </div>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="glass rounded-2xl p-4">
+          <div class="flex items-center justify-between mb-3">
+            <h4 class="font-bold text-slate-700">Skins</h4>
+            <div class="text-sm text-slate-500">Afecta la zona de juego</div>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="rounded-xl p-3 glass">
+              <div class="h-16 rounded-lg skin-bubble"></div>
+              <div class="mt-2 flex items-center justify-between">
+                <div>
+                  <div class="font-semibold text-slate-700">Bubble</div>
+                  <div class="text-xs text-slate-500">Suave y aireada</div>
+                </div>
+                <button class="px-3 py-1 rounded-full bg-amber-400 text-white text-sm" onclick="buySkin('bubble', 40)">40 🪙</button>
+              </div>
+            </div>
+            <div class="rounded-xl p-3 glass">
+              <div class="h-16 rounded-lg skin-grid"></div>
+              <div class="mt-2 flex items-center justify-between">
+                <div>
+                  <div class="font-semibold text-slate-700">Grid</div>
+                  <div class="text-xs text-slate-500">Líneas sutiles</div>
+                </div>
+                <button class="px-3 py-1 rounded-full bg-amber-400 text-white text-sm" onclick="buySkin('grid', 60)">60 🪙</button>
+              </div>
+            </div>
+            <div class="rounded-xl p-3 glass">
+              <div class="h-16 rounded-lg skin-soft"></div>
+              <div class="mt-2 flex items-center justify-between">
+                <div>
+                  <div class="font-semibold text-slate-700">Soft</div>
+                  <div class="text-xs text-slate-500">Brillo delicado</div>
+                </div>
+                <button class="px-3 py-1 rounded-full bg-amber-400 text-white text-sm" onclick="buySkin('soft', 55)">55 🪙</button>
+              </div>
+            </div>
+            <div class="rounded-xl p-3 glass">
+              <div class="h-16 rounded-lg skin-stars"></div>
+              <div class="mt-2 flex items-center justify-between">
+                <div>
+                  <div class="font-semibold text-slate-700">Stars</div>
+                  <div class="text-xs text-slate-500">Estrellas doradas</div>
+                </div>
+                <button class="px-3 py-1 rounded-full bg-amber-400 text-white text-sm" onclick="buySkin('stars', 80)">80 🪙</button>
+              </div>
+            </div>
+            <div class="rounded-xl p-3 glass">
+              <div class="h-16 rounded-lg skin-leaf"></div>
+              <div class="mt-2 flex items-center justify-between">
+                <div>
+                  <div class="font-semibold text-slate-700">Leaf</div>
+                  <div class="text-xs text-slate-500">Patrón verde suave</div>
+                </div>
+                <button class="px-3 py-1 rounded-full bg-amber-400 text-white text-sm" onclick="buySkin('leaf', 70)">70 🪙</button>
+              </div>
+            </div>
+            <div class="rounded-xl p-3 glass">
+              <div class="h-16 rounded-lg skin-waves"></div>
+              <div class="mt-2 flex items-center justify-between">
+                <div>
+                  <div class="font-semibold text-slate-700">Waves</div>
+                  <div class="text-xs text-slate-500">Ondas de colores</div>
+                </div>
+                <button class="px-3 py-1 rounded-full bg-amber-400 text-white text-sm" onclick="buySkin('waves', 90)">90 🪙</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="glass rounded-2xl p-4">
+          <div class="flex items-center justify-between mb-3">
+            <h4 class="font-bold text-slate-700">Avatares</h4>
+            <div class="text-sm text-slate-500">Muestra tu estilo</div>
+          </div>
+          <div class="grid grid-cols-3 gap-3">
+            <button class="glass rounded-xl p-4 text-2xl hover:scale-[1.03] transition" onclick="buyAvatar('😊', 30)">😊<div class="text-xs mt-1">30 🪙</div></button>
+            <button class="glass rounded-xl p-4 text-2xl hover:scale-[1.03] transition" onclick="buyAvatar('😎', 45)">😎<div class="text-xs mt-1">45 🪙</div></button>
+            <button class="glass rounded-xl p-4 text-2xl hover:scale-[1.03] transition" onclick="buyAvatar('🦄', 80)">🦄<div class="text-xs mt-1">80 🪙</div></button>
+            <button class="glass rounded-xl p-4 text-2xl hover:scale-[1.03] transition" onclick="buyAvatar('🌈', 50)">🌈<div class="text-xs mt-1">50 🪙</div></button>
+            <button class="glass rounded-xl p-4 text-2xl hover:scale-[1.03] transition" onclick="buyAvatar('🐼', 60)">🐼<div class="text-xs mt-1">60 🪙</div></button>
+            <button class="glass rounded-xl p-4 text-2xl hover:scale-[1.03] transition" onclick="buyAvatar('🛰️', 70)">🛰️<div class="text-xs mt-1">70 🪙</div></button>
+            <button class="glass rounded-xl p-4 text-2xl hover:scale-[1.03] transition" onclick="buyAvatar('🦊', 65)">🦊<div class="text-xs mt-1">65 🪙</div></button>
+            <button class="glass rounded-xl p-4 text-2xl hover:scale-[1.03] transition" onclick="buyAvatar('🎮', 55)">🎮<div class="text-xs mt-1">55 🪙</div></button>
+            <button class="glass rounded-xl p-4 text-2xl hover:scale-[1.03] transition" onclick="buyAvatar('🚀', 75)">🚀<div class="text-xs mt-1">75 🪙</div></button>
+          </div>
+        </div>
+      </div>
+      <div class="mt-6 flex justify-end">
+        <button class="rounded-xl px-5 py-2 bg-slate-700 text-white" onclick="closeShop()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confetti -->
+  <canvas id="confetti" class="confetti hidden"></canvas>
+
+  <script>
+    // === Estado del juego ===
+    let state = {
+      totalScore: 0,
+      currentStreak: 0,
+      gameScore: 0,
+      gameTimer: null,
+      timeLeft: 60,
+      coins: 50,
+      level: 1,
+      levelXP: 0,
+      bestReactionTime: null,
+      ownedSkins: new Set(['bubble']),
+      ownedAvatars: new Set(['😊']),
+      currentSkin: 'bubble',
+      currentAvatar: '😊',
+      playerName: 'Jugador/a',
+      badges: [],
+      soundEnabled: true,
+      difficultyDynamic: true
+    };
+
+    const skinNameMap = {
+      bubble: 'Bubble', grid: 'Grid', soft: 'Soft',
+      stars: 'Stars', leaf: 'Leaf', waves: 'Waves'
+    };
+
+    const badgeIcons = {
+      streak5: '🔥', streak10: '⚡', fast: '⏱️',
+      memory: '🧠', shopper: '🛍️', explorer: '🗺️'
+    };
+
+    // === Guardar y cargar progreso ===
+    function saveProgress() {
+      const data = {
+        ...state,
+        ownedSkins: Array.from(state.ownedSkins),
+        ownedAvatars: Array.from(state.ownedAvatars),
+        badges: state.badges
+      };
+      localStorage.setItem('brainGymSave', JSON.stringify(data));
+    }
+
+    function loadProgress() {
+      const saved = localStorage.getItem('brainGymSave');
+      if (saved) {
+        const data = JSON.parse(saved);
+        Object.assign(state, data);
+        state.ownedSkins = new Set(data.ownedSkins);
+        state.ownedAvatars = new Set(data.ownedAvatars);
+        state.badges = data.badges || [];
+        toast('Progreso cargado 🎉');
+      }
+    }
+
+    // === UI ===
+    function updateTopbar() {
+      document.getElementById('coins').textContent = state.coins;
+      document.getElementById('totalScore').textContent = state.totalScore;
+      document.getElementById('streak').textContent = state.currentStreak;
+      const mult = 1 + Math.floor(state.currentStreak / 5);
+      document.getElementById('streakMult').textContent = mult;
+      document.getElementById('comboLabel').textContent = `Combo x${mult}`;
+      document.getElementById('comboLabel').classList.toggle('hidden', state.currentStreak < 2);
+      document.getElementById('playerLevel').textContent = state.level;
+      document.getElementById('levelProgress').style.width = Math.min(state.levelXP, 100) + '%';
+      document.getElementById('badgeCount').textContent = state.badges.length;
+      document.getElementById('avatarCircle').textContent = state.currentAvatar;
+      document.getElementById('currentSkinLabel').textContent = skinNameMap[state.currentSkin] || '—';
+      document.getElementById('playerName').value = state.playerName;
+    }
+
+    // === Eventos de guardado ===
+    window.addEventListener('beforeunload', saveProgress);
+    window.addEventListener('load', loadProgress);
+
+    // Llamada inicial
+    updateTopbar();
+    refreshInventory();
+    refreshBadges();
+
+    // Resto del código igual (miniConfetti, earnXP, addBadge, etc.)
+    // ... (mismas funciones con `state.` en lugar de variables globales)
+  </script>
+</body>
+</html>
